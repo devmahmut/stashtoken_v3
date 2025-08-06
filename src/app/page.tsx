@@ -203,7 +203,6 @@ export default function Home() {
       };
 
       // Layout değişikliği
-      const container = document.getElementById('morphing-container');
       const leftText = leftTextRef.current;
       const rightText = rightTextRef.current;
       const svgContainer = document.getElementById('svg-container');
@@ -610,7 +609,7 @@ export default function Home() {
 
                 <div className="flex flex-col gap-6">
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
-                    "CONCEPTUALIZATION"
+                    &ldquo;CONCEPTUALIZATION&rdquo;
                   </h1>
                 </div>
 
@@ -690,9 +689,9 @@ export default function Home() {
                  <p className="text-green-600 font-semibold text-lg">Stage 2:</p>
                  
                  <div className="flex flex-col gap-6">
-                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
-                     "DEVELOPMENT"
-                   </h1>
+                                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
+                    &ldquo;DEVELOPMENT&rdquo;
+                  </h1>
                  </div>
 
                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-green-600 mt-3 mb-6">
@@ -789,9 +788,9 @@ export default function Home() {
                  <p className="text-purple-600 font-semibold text-lg">Stage 3:</p>
                  
                  <div className="flex flex-col gap-6">
-                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
-                     "LAUNCH"
-                   </h1>
+                                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
+                    &ldquo;LAUNCH&rdquo;
+                  </h1>
                  </div>
 
                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-purple-600 mt-3 mb-6">
@@ -868,9 +867,9 @@ export default function Home() {
                  <p className="text-orange-600 font-semibold text-lg">Stage 4:</p>
                  
                  <div className="flex flex-col gap-6">
-                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
-                     "GROWTH"
-                   </h1>
+                                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 uppercase">
+                    &ldquo;GROWTH&rdquo;
+                  </h1>
                  </div>
 
                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-orange-600 mt-3 mb-6">
