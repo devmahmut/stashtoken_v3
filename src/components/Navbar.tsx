@@ -16,7 +16,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
+            <Link href="/" className="text-2xl text-gray-900 hover:text-gray-700 transition-colors" style={{ fontFamily: 'var(--font-dela-gothic-one)', fontWeight: '400' }}>
               Stashtoken
             </Link>
           </div>

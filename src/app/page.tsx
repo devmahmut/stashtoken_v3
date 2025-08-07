@@ -8,9 +8,6 @@ import { TextPlugin } from 'gsap/TextPlugin';
 
 export default function Home() {
   const tokenomicsRef = useRef<HTMLHeadingElement>(null);
-  const morphSvgRef = useRef<SVGPathElement>(null);
-  const leftTextRef = useRef<HTMLDivElement>(null);
-  const rightTextRef = useRef<HTMLDivElement>(null);
   const roadMapRef = useRef<HTMLHeadingElement>(null);
   const faqRef = useRef<HTMLHeadingElement>(null);
 
@@ -27,6 +24,71 @@ export default function Home() {
   const handleFeatureClick = (index: number) => {
     setSelectedFeature(index);
   };
+
+  // Tokenomics section state management
+  const [selectedTokenomics, setSelectedTokenomics] = useState<number>(0);
+
+  const handleTokenomicsClick = (index: number) => {
+    setSelectedTokenomics(index);
+  };
+
+  // Tokenomics data
+  const tokenomicsData = [
+    {
+      id: 0,
+      title: "LP Locked",
+      percentage: "10%",
+      color: "orange",
+      description: "Liquidity tokens are locked for security purposes to ensure investor protection and prevent sudden exits, maintaining market stability.",
+      features: [
+        "12 month lock period",
+        "Automatic burn mechanism", 
+        "Transparent tracking"
+      ],
+      lottieUrl: "https://lottie.host/fdc620cd-e2b3-4400-ad96-21808383cad5/KMw0pZvIgP.lottie",
+      lottiePosition: "top-right"
+    },
+    {
+      id: 1,
+      title: "Treasury",
+      percentage: "25%",
+      color: "blue",
+      description: "Project treasury reserved for future development, marketing activities and unexpected situations with transparent community governance.",
+      features: [
+        "Community voting system",
+        "Monthly spending reports",
+        "Development funding"
+      ],
+      lottieUrl: "https://lottie.host/fe789609-cfdb-4992-916a-2ed382c40301/idn89VXhVz.lottie",
+      lottiePosition: "center-right"
+    },
+    {
+      id: 2,
+      title: "Community & Charity",
+      percentage: "50%",
+      color: "green",
+      description: "Half of the token supply dedicated to community activities and charitable causes, creating positive social impact and engagement.",
+      features: [
+        "Charity partnerships",
+        "Community events",
+        "Social impact initiatives"
+      ],
+      lottieUrl: "https://lottie.host/c886444b-660b-48f1-9f75-dc3c842307f0/w3WV283wra.lottie",
+      lottiePosition: "bottom-right"
+    },
+    {
+      id: 3,
+      title: "CEX Listing",
+      percentage: "15%",
+      color: "purple",
+      description: "Funds allocated for centralized exchange listings, covering fees and marketing activities required for major exchange placement.",
+      features: [
+        "Tier-1 exchange targets",
+        "Listing fee coverage",
+        "Market making support"
+      ]
+    }
+  ];
 
   // Video data for features (şimdilik aynı video)
   const featureVideos = [
@@ -58,7 +120,44 @@ export default function Home() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
-    // Tokenomics başlık animasyonu
+    // Boyut ayarlama fonksiyonları
+    const adjustTokenomicsSize = () => {
+      if (tokenomicsRef.current) {
+        const container = tokenomicsRef.current.parentElement;
+        if (container) {
+          const containerWidth = container.offsetWidth;
+          const textWidth = tokenomicsRef.current.scrollWidth;
+          const scale = containerWidth / textWidth;
+          tokenomicsRef.current.style.transform = `scaleX(${scale})`;
+        }
+      }
+    };
+
+    const adjustRoadMapSize = () => {
+      if (roadMapRef.current) {
+        const container = roadMapRef.current.parentElement;
+        if (container) {
+          const containerWidth = container.offsetWidth;
+          const textWidth = roadMapRef.current.scrollWidth;
+          const scale = containerWidth / textWidth;
+          roadMapRef.current.style.transform = `scaleX(${scale})`;
+        }
+      }
+    };
+
+    const adjustFaqSize = () => {
+      if (faqRef.current) {
+        const container = faqRef.current.parentElement;
+        if (container) {
+          const containerWidth = container.offsetWidth;
+          const textWidth = faqRef.current.scrollWidth;
+          const scale = containerWidth / textWidth;
+          faqRef.current.style.transform = `scaleX(${scale})`;
+        }
+      }
+    };
+
+    // Tokenomics başlık animasyonu ve boyut ayarlama
     if (tokenomicsRef.current) {
       const text = tokenomicsRef.current.textContent || '';
       tokenomicsRef.current.innerHTML = '';
@@ -71,6 +170,14 @@ export default function Home() {
         span.style.transform = 'translateY(100px)';
         tokenomicsRef.current?.appendChild(span);
       });
+
+      // İlk ayarlama
+      setTimeout(adjustTokenomicsSize, 100);
+      
+      // Resize olayında tekrar ayarla
+      window.addEventListener('resize', adjustTokenomicsSize);
+      window.addEventListener('resize', adjustRoadMapSize);
+      window.addEventListener('resize', adjustFaqSize);
 
       gsap.to(tokenomicsRef.current.children, {
         opacity: 1,
@@ -85,9 +192,16 @@ export default function Home() {
           toggleActions: "play none none reverse"
         }
       });
+
+      // Cleanup fonksiyonu - tüm event listener'ları temizle
+      return () => {
+        window.removeEventListener('resize', adjustTokenomicsSize);
+        window.removeEventListener('resize', adjustRoadMapSize);
+        window.removeEventListener('resize', adjustFaqSize);
+      };
     }
 
-    // Road Map ScrambleText animasyonu
+    // Road Map ScrambleText animasyonu ve boyut ayarlama
     if (roadMapRef.current) {
       // Başlangıçta scrambled text ile başla
       const roadElement = roadMapRef.current.querySelector('.road-text');
@@ -96,6 +210,9 @@ export default function Home() {
       if (roadElement && mapElement) {
         roadElement.textContent = 'XZQRMBTKLWPFGHYUJNM';
         mapElement.textContent = 'YBPWKLZXCVBNMASDFGH';
+        
+        // İlk ayarlama
+        setTimeout(adjustRoadMapSize, 100);
         
         gsap.timeline({
           scrollTrigger: {
@@ -108,20 +225,25 @@ export default function Home() {
         .to(roadElement, {
           duration: 4,
           text: "ROAD",
-          ease: "none"
+          ease: "none",
+          onComplete: adjustRoadMapSize
         })
         .to(mapElement, {
           duration: 4,
           text: "MAP", 
-          ease: "none"
+          ease: "none",
+          onComplete: adjustRoadMapSize
         }, "-=3");
       }
     }
 
-    // FAQ ScrambleText animasyonu
+    // FAQ ScrambleText animasyonu ve boyut ayarlama
     if (faqRef.current) {
       // Başlangıçta scrambled text ile başla
       faqRef.current.textContent = 'XQZMWBFGH';
+      
+      // İlk ayarlama
+      setTimeout(adjustFaqSize, 100);
       
       gsap.timeline({
         scrollTrigger: {
@@ -134,217 +256,21 @@ export default function Home() {
       .to(faqRef.current, {
         duration: 3,
         text: "FAQ",
-        ease: "none"
+        ease: "none",
+        onComplete: adjustFaqSize
       });
     }
 
-    // SVG morph ve text animasyonu
-    const data = [
-      { left: 'LP Locked', right: '10%', svg: 'chair', layout: 'vertical' },
-      { left: 'Treasury', right: '25%', svg: 'armchair', layout: 'vertical' },
-      { left: 'MEME Charity', right: '50%', svg: 'wardrobe', layout: 'vertical' },
-      { left: 'CEX Listing', right: '15%', svg: 'bed', layout: 'vertical' }
-    ];
 
-    let currentIndex = 0;
-
-    const animateContent = () => {
-      const next = data[currentIndex];
-
-      // Text animasyonu (split text benzeri)
-      const animateText = (element: HTMLElement, newText: string) => {
-        if (!element) return;
-        
-        const currentChars = element.children;
-        if (currentChars.length > 0) {
-          gsap.to(currentChars, {
-            opacity: 0,
-            y: -50,
-            duration: 0.2,
-            stagger: 0.01,
-            onComplete: () => {
-              element.innerHTML = '';
-              newText.split('').forEach(char => {
-                const span = document.createElement('span');
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.display = 'inline-block';
-                span.style.opacity = '0';
-                span.style.transform = 'translateY(50px)';
-                element.appendChild(span);
-              });
-
-              gsap.to(element.children, {
-                opacity: 1,
-                y: 0,
-                duration: 0.3,
-                stagger: 0.01,
-                ease: "back.out(1.7)"
-              });
-            }
-          });
-        } else {
-          newText.split('').forEach(char => {
-            const span = document.createElement('span');
-            span.textContent = char === ' ' ? '\u00A0' : char;
-            span.style.display = 'inline-block';
-            span.style.opacity = '0';
-            span.style.transform = 'translateY(50px)';
-            element.appendChild(span);
-          });
-
-          gsap.to(element.children, {
-            opacity: 1,
-            y: 0,
-            duration: 0.3,
-            stagger: 0.01,
-            ease: "back.out(1.7)"
-          });
-        }
-      };
-
-      // Layout değişikliği
-      const leftText = leftTextRef.current;
-      const rightText = rightTextRef.current;
-      const svgContainer = document.getElementById('svg-container');
-
-            // Sadece text'leri fade out (SVG sürekli görünür kalacak)
-      gsap.to([leftText, rightText], {
-        opacity: 0,
-        duration: 0.2,
-        onComplete: () => {
-          // Dikey layout: eşit aralıklandırma (20%, 50%, 80%)
-          if (leftText) {
-            leftText.style.position = 'absolute';
-            leftText.style.left = '50%';
-            leftText.style.top = '20%';
-            leftText.style.transform = 'translate(-50%, -50%)';
-            leftText.style.textAlign = 'center';
-            leftText.style.right = 'auto';
-            leftText.style.bottom = 'auto';
-          }
-          if (svgContainer) {
-            svgContainer.style.position = 'absolute';
-            svgContainer.style.left = '50%';
-            svgContainer.style.top = '50%';
-            svgContainer.style.transform = 'translate(-50%, -50%)';
-          }
-          if (rightText) {
-            rightText.style.position = 'absolute';
-            rightText.style.left = '50%';
-            rightText.style.top = '80%';
-            rightText.style.transform = 'translate(-50%, -50%)';
-            rightText.style.textAlign = 'center';
-            rightText.style.right = 'auto';
-            rightText.style.bottom = 'auto';
-          }
-
-          // Text animasyonları
-          animateText(leftTextRef.current!, next.left);
-          animateText(rightTextRef.current!, next.right);
-
-          // Sadece text'leri tekrar fade in yap
-          gsap.to([leftText, rightText], {
-            opacity: 1,
-            duration: 0.3,
-            delay: 0.1
-          });
-        }
-      });
-
-      // SVG paths - super simple morph-friendly shapes
-      const chairPath = "M200 90 L400 90 L400 110 L380 110 L380 190 L370 200 L230 200 L220 190 L220 110 L200 110 Z M220 110 L220 190 M380 190 L380 110 M200 90 L200 70 M400 90 L400 70 M200 70 L400 70";
-      const armchairPath = "M120 100 L480 100 L480 120 L460 120 L460 190 L450 200 L150 200 L140 190 L140 120 L120 120 Z M100 100 L100 140 M500 100 L500 140 M100 140 L140 140 M460 140 L500 140 M140 120 L140 190 M460 190 L460 120";
-      const wardrobePath = "M180 70 L420 70 L420 90 L420 180 L410 190 L190 190 L180 180 L180 90 Z M300 70 L300 190 M200 110 L220 110 M380 110 L400 110 M180 60 L420 60 M180 200 L420 200 M180 70 L180 200 M420 70 L420 200";
-      const bedPath = "M120 120 L480 120 L480 140 L480 160 L470 170 L130 170 L120 160 L120 140 Z M140 100 L460 100 M140 100 L140 120 M460 100 L460 120 M160 80 L200 80 M240 80 L280 80 M320 80 L360 80 M400 80 L440 80";
-
-      const getTargetPath = (svgType: string) => {
-        switch(svgType) {
-          case 'chair': return chairPath;
-          case 'armchair': return armchairPath;
-          case 'wardrobe': return wardrobePath;
-          case 'bed': return bedPath;
-          default: return chairPath;
-        }
-      };
-
-      const targetPath = getTargetPath(next.svg);
-
-      // SVG morph animasyonu (text animasyonu ile paralel)
-      if (morphSvgRef.current) {
-        gsap.to(morphSvgRef.current, {
-          attr: { d: targetPath },
-          duration: 0.8,
-          ease: "power2.inOut",
-          delay: 0.1
-        });
-      }
-
-      currentIndex = (currentIndex + 1) % data.length;
-    };
-
-    // İlk içeriği ayarla ve döngüyü başlat
-    if (leftTextRef.current && rightTextRef.current) {
-      const initialData = data[0];
-      
-      // İlk layout'u ayarla (horizontal)
-      const leftText = leftTextRef.current;
-      const rightText = rightTextRef.current;
-      const svgContainer = document.getElementById('svg-container');
-      
-             // Hepsi dikey layout olduğu için özel ayar gerek yok
-       // CSS'te zaten doğru dikey pozisyonlar ayarlı (20%, 50%, 80%)
-      
-      initialData.left.split('').forEach(char => {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        span.style.display = 'inline-block';
-        span.style.opacity = '0';
-        span.style.transform = 'translateY(50px)';
-        leftTextRef.current?.appendChild(span);
-      });
-
-      initialData.right.split('').forEach(char => {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        span.style.display = 'inline-block';
-        span.style.opacity = '0';
-        span.style.transform = 'translateY(50px)';
-        rightTextRef.current?.appendChild(span);
-      });
-
-      // İlk içerik animasyonu
-      gsap.to(leftTextRef.current.children, {
-        opacity: 1,
-        y: 0,
-        duration: 0.3,
-        stagger: 0.01,
-        ease: "back.out(1.7)",
-        delay: 0.2
-      });
-
-      gsap.to(rightTextRef.current.children, {
-        opacity: 1,
-        y: 0,
-        duration: 0.3,
-        stagger: 0.01,
-        ease: "back.out(1.7)",
-        delay: 0.4
-      });
-
-      // 1.5 saniye aralıklarla döngü
-      const interval = setInterval(animateContent, 1500);
-      
-      return () => clearInterval(interval);
-    }
   }, []);
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20">
-        <div className="grid lg:grid-cols-3 gap-8 items-center">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
           {/* Sol Lottie Animasyonu */}
-          <div className="flex justify-center lg:justify-end order-2 lg:order-1">
+          <div className="flex justify-center order-2 lg:order-1">
             <div className="w-64 h-64 lg:w-80 lg:h-80">
               <DotLottieReact
                 src="https://lottie.host/ebabcade-78b0-4d84-8e9a-f7de44854f79/Y2gmsxnjhJ.lottie"
@@ -355,11 +281,11 @@ export default function Home() {
           </div>
 
           {/* Orta İçerik */}
-          <div className="text-center order-1 lg:order-2">
+          <div className="text-center order-1 lg:order-2 flex-1 max-w-2xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
               Your favorite crypto wallet.
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 mb-8">
               Explore Ethereum with the best wallet for iOS. 
               Interacting with crypto has never been so simple.
             </p>
@@ -369,7 +295,7 @@ export default function Home() {
           </div>
 
           {/* Sağ Lottie Animasyonu */}
-          <div className="flex justify-center lg:justify-start order-3">
+          <div className="flex justify-center order-3">
             <div className="w-64 h-64 lg:w-80 lg:h-80">
               <DotLottieReact
                 src="https://lottie.host/8cf549cb-0515-4ad7-a147-9cb5a1ffb170/GhdwQxyWKJ.lottie"
@@ -493,69 +419,185 @@ export default function Home() {
       {/* Tokenomics Section */}
       <div className="bg-white py-20">
         <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="w-full flex items-center justify-center" style={{ height: '200px' }}>
+          <div className="w-full flex items-center justify-center py-8 overflow-hidden">
             <h2 
               ref={tokenomicsRef}
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[11rem] font-bold text-gray-900 text-center w-full leading-none uppercase"
+              className="text-gray-900 text-center leading-none uppercase whitespace-nowrap"
+              style={{ 
+                fontSize: '8rem',
+                transform: 'scaleX(1)',
+                transformOrigin: 'center',
+                letterSpacing: '-0.02em',
+                width: 'fit-content'
+              }}
             >
               Tokenomics
             </h2>
           </div>
 
-          {/* Morphing SVG Section */}
-          <div className="flex items-center justify-center mt-16 mb-20" style={{ height: '500px' }}>
-            <div id="morphing-container" className="relative w-full max-w-4xl h-full">
-              {/* Sol/Üst Text */}
-              <div 
-                ref={leftTextRef}
-                className="absolute text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 inline-block"
-                style={{
-                  left: '50%',
-                  top: '20%',
-                  transform: 'translate(-50%, -50%)',
-                  textAlign: 'center'
-                }}
-              ></div>
-
-              {/* Orta SVG */}
-              <div 
-                id="svg-container"
-                className="absolute"
-                style={{
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)'
-                }}
-              >
-                <svg 
-                  width="600" 
-                  height="250" 
-                  viewBox="0 0 600 250" 
-                  className="overflow-visible"
-                >
-                  <path
-                    ref={morphSvgRef}
-                    d="M200 90 L400 90 L400 110 L380 110 L380 190 L370 200 L230 200 L220 190 L220 110 L200 110 Z M220 110 L220 190 M380 190 L380 110 M200 90 L200 70 M400 90 L400 70 M200 70 L400 70"
-                    stroke="#f97316"
-                    strokeWidth="6"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+          {/* Interactive Tokenomics Content */}
+          <div className="mt-16">
+            <div className="grid lg:grid-cols-4 gap-8 items-stretch">
+              {/* Sol taraf - Navigation Tabs */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-8 space-y-2 h-full">
+                  {tokenomicsData.map((item, index) => {
+                    const colorClasses = {
+                      orange: {
+                        active: 'border-orange-500 bg-orange-50 shadow-lg',
+                        inactive: 'border-gray-200 hover:border-orange-500 hover:bg-orange-50',
+                        dot: 'bg-orange-500',
+                        text: 'text-orange-600'
+                      },
+                      blue: {
+                        active: 'border-blue-500 bg-blue-50 shadow-lg',
+                        inactive: 'border-gray-200 hover:border-blue-500 hover:bg-blue-50',
+                        dot: 'bg-blue-500',
+                        text: 'text-blue-600'
+                      },
+                      green: {
+                        active: 'border-green-500 bg-green-50 shadow-lg',
+                        inactive: 'border-gray-200 hover:border-green-500 hover:bg-green-50',
+                        dot: 'bg-green-500',
+                        text: 'text-green-600'
+                      },
+                      purple: {
+                        active: 'border-purple-500 bg-purple-50 shadow-lg',
+                        inactive: 'border-gray-200 hover:border-purple-500 hover:bg-purple-50',
+                        dot: 'bg-purple-500',
+                        text: 'text-purple-600'
+                      }
+                    };
+                    
+                    const classes = colorClasses[item.color as keyof typeof colorClasses];
+                    
+                    return (
+                      <div 
+                        key={item.id}
+                        className={`group cursor-pointer p-4 rounded-xl border-2 transition-all duration-300 ${
+                          selectedTokenomics === index ? classes.active : classes.inactive
+                        }`}
+                        onClick={() => handleTokenomicsClick(index)}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-3 h-3 ${classes.dot} rounded-full`}></div>
+                          <div>
+                            <h3 className="font-bold text-gray-900">{item.title}</h3>
+                            <p className={`text-2xl font-bold ${classes.text}`}>{item.percentage}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Sağ/Alt Text */}
-              <div 
-                ref={rightTextRef}
-                className="absolute text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 inline-block"
-                style={{
-                  left: '50%',
-                  top: '80%',
-                  transform: 'translate(-50%, -50%)',
-                  textAlign: 'center'
-                }}
-              ></div>
+              {/* Sağ taraf - Content Area */}
+              <div className="lg:col-span-3">
+                {(() => {
+                  const currentData = tokenomicsData[selectedTokenomics];
+                  const contentClasses = {
+                    orange: {
+                      background: 'bg-gradient-to-br from-orange-50 to-orange-100',
+                      border: 'border-orange-200',
+                      iconBg: 'bg-orange-500',
+                      text: 'text-orange-600',
+                      dotBg: 'bg-orange-500'
+                    },
+                    blue: {
+                      background: 'bg-gradient-to-br from-blue-50 to-blue-100',
+                      border: 'border-blue-200',
+                      iconBg: 'bg-blue-500',
+                      text: 'text-blue-600',
+                      dotBg: 'bg-blue-500'
+                    },
+                    green: {
+                      background: 'bg-gradient-to-br from-green-50 to-green-100',
+                      border: 'border-green-200',
+                      iconBg: 'bg-green-500',
+                      text: 'text-green-600',
+                      dotBg: 'bg-green-500'
+                    },
+                    purple: {
+                      background: 'bg-gradient-to-br from-purple-50 to-purple-100',
+                      border: 'border-purple-200',
+                      iconBg: 'bg-purple-500',
+                      text: 'text-purple-600',
+                      dotBg: 'bg-purple-500'
+                    }
+                  };
+                  
+                                     const classes = contentClasses[currentData.color as keyof typeof contentClasses];
+                   
+                   // Lottie positioning function
+                   const getLottiePositionStyles = (position: string) => {
+                     switch (position) {
+                       case 'top-right':
+                         return { top: '-208px', right: '0', zIndex: 1 };
+                       case 'center-right':
+                         return { bottom: '-78px', right: '0', zIndex: 1 };
+                       case 'bottom-right':
+                         return { bottom: '-99px', right: '0', zIndex: 1 };
+                       case 'center':
+                         return { display: 'none' }; // 4. lottie olmayacak
+                       default:
+                         return { top: '50%', right: '32px', transform: 'translateY(-50%)', zIndex: 1 };
+                     }
+                   };
+                   
+                   return (
+                     <div className={`${classes.background} rounded-2xl p-8 border ${classes.border} transition-all duration-500 relative min-h-[400px]`}>
+                       <div className="flex items-center space-x-4 mb-6">
+                         <div className={`w-8 h-8 ${classes.iconBg} rounded-full flex items-center justify-center`}>
+                           <div className="w-4 h-4 bg-white rounded-full"></div>
+                         </div>
+                         <div>
+                           <h3 className="text-2xl font-bold text-gray-900">{currentData.title}</h3>
+                           <p className={`${classes.text} font-semibold`}>{currentData.percentage} of Total Supply</p>
+                         </div>
+                       </div>
+                      
+                                             <div className="grid md:grid-cols-2 gap-6">
+                         <div>
+                           <h4 className="font-bold text-gray-900 mb-3">Description</h4>
+                           <p className="text-gray-700 leading-relaxed">
+                             {currentData.description}
+                           </p>
+                         </div>
+                         
+                         <div>
+                           <h4 className="font-bold text-gray-900 mb-3">Key Features</h4>
+                          <div className="space-y-2">
+                            {currentData.features.map((feature, index) => (
+                              <div key={index} className="flex items-center space-x-2">
+                                <div className={`w-2 h-2 ${classes.dotBg} rounded-full`}></div>
+                                <span className="text-gray-700">{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                                               </div>
+                         
+                                                  {/* Lottie Animation */}
+                         {currentData.lottieUrl && currentData.lottiePosition && (
+                           <div 
+                             className="absolute pointer-events-none"
+                             style={getLottiePositionStyles(currentData.lottiePosition)}
+                           >
+                             <div className="w-48 h-48 lg:w-64 lg:h-64">
+                               <DotLottieReact
+                                 src={currentData.lottieUrl}
+                                 loop
+                                 autoplay
+                               />
+                             </div>
+                           </div>
+                         )}
+
+                       </div>
+                  );
+                })()}
+              </div>
             </div>
           </div>
         </div>
@@ -566,10 +608,17 @@ export default function Home() {
         <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Sol taraf - Road Map başlığı */}
-            <div className="text-left">
+            <div className="text-left overflow-hidden">
               <h2 
                 ref={roadMapRef}
-                className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[11rem] font-bold text-gray-900 leading-none uppercase"
+                className="text-gray-900 leading-none uppercase whitespace-nowrap"
+                style={{ 
+                  fontSize: '8rem',
+                  transform: 'scaleX(1)',
+                  transformOrigin: 'left',
+                  letterSpacing: '-0.02em',
+                  width: 'fit-content'
+                }}
               >
                 <div className="road-text">Road</div>
                 <div className="map-text">Map</div>
@@ -959,11 +1008,18 @@ export default function Home() {
          <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             {/* Sol taraf - FAQ Başlık */}
-            <div className="space-y-6">
+            <div className="space-y-6 overflow-hidden">
               <p className="text-gray-600 text-lg font-medium">Curious mind asks</p>
               <h2 
                 ref={faqRef}
-                className="text-7xl lg:text-9xl font-bold text-gray-900 uppercase tracking-wider"
+                className="text-gray-900 uppercase leading-none whitespace-nowrap"
+                style={{ 
+                  fontSize: '8rem',
+                  transform: 'scaleX(1)',
+                  transformOrigin: 'left',
+                  letterSpacing: '-0.02em',
+                  width: 'fit-content'
+                }}
               >
                 FAQ
               </h2>
@@ -1020,7 +1076,7 @@ export default function Home() {
             <div className="flex flex-col lg:flex-row justify-between items-center border-t border-gray-300 pt-12">
               {/* Sol taraf - Logo (navbar ile aynı) */}
               <div className="mb-8 lg:mb-0">
-                <span className="text-2xl font-bold text-gray-900">Stashtoken</span>
+                <span className="text-2xl text-gray-900" style={{ fontFamily: 'var(--font-dela-gothic-one)', fontWeight: '400' }}>Stashtoken</span>
               </div>
 
               {/* Sağ taraf - Sosyal Medya İkonları */}
