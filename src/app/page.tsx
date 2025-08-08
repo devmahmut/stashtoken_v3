@@ -689,6 +689,95 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Roadmap Timeline Graphics */}
+          <div className="mt-16 mb-16">
+            <div className="flex justify-center">
+              <svg 
+                viewBox="0 0 800 320" 
+                className="w-full max-w-5xl h-auto"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Background decorative elements */}
+                <defs>
+                  <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{ stopColor: '#06B6D4', stopOpacity: 0.8 }} />
+                    <stop offset="25%" style={{ stopColor: '#10B981', stopOpacity: 0.8 }} />
+                    <stop offset="50%" style={{ stopColor: '#8B5CF6', stopOpacity: 0.8 }} />
+                    <stop offset="75%" style={{ stopColor: '#F59E0B', stopOpacity: 0.8 }} />
+                    <stop offset="100%" style={{ stopColor: '#EF4444', stopOpacity: 0.8 }} />
+                  </linearGradient>
+                  
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge> 
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                
+                {/* Background path (wider, subtle) */}
+                <path
+                  d="M50 80 L200 80 L250 140 L400 140 L450 200 L600 200 L650 260 L750 260"
+                  stroke="#E5E7EB"
+                  strokeWidth="8"
+                  fill="none"
+                  opacity="0.3"
+                />
+                
+                {/* Animated main path */}
+                <path
+                  d="M50 80 L200 80 L250 140 L400 140 L450 200 L600 200 L650 260 L750 260"
+                  stroke="url(#pathGradient)"
+                  strokeWidth="4"
+                  fill="none"
+                  strokeDasharray="1000"
+                  strokeDashoffset="1000"
+                  className="animate-draw-path"
+                  filter="url(#glow)"
+                />
+                
+                {/* Stage 1 - Conceptualization */}
+                <g className="stage-group cursor-pointer" style={{ animationDelay: '0.5s' }}>
+                  <circle cx="50" cy="80" r="16" fill="#06B6D4" stroke="#ffffff" strokeWidth="4" className="animate-scale-in hover:animate-bounce"/>
+                  <circle cx="50" cy="80" r="20" fill="none" stroke="#06B6D4" strokeWidth="2" opacity="0.3" className="animate-ping"/>
+                  <text x="50" y="86" textAnchor="middle" className="text-sm font-bold fill-white">1</text>
+                  <text x="50" y="115" textAnchor="middle" className="text-xs font-bold fill-cyan-600 md:text-sm">Conceptualization</text>
+                </g>
+                
+                {/* Stage 2 - Development */}
+                <g className="stage-group cursor-pointer" style={{ animationDelay: '1s' }}>
+                  <circle cx="250" cy="140" r="16" fill="#10B981" stroke="#ffffff" strokeWidth="4" className="animate-scale-in hover:animate-bounce"/>
+                  <circle cx="250" cy="140" r="20" fill="none" stroke="#10B981" strokeWidth="2" opacity="0.3" className="animate-ping"/>
+                  <text x="250" y="146" textAnchor="middle" className="text-sm font-bold fill-white">2</text>
+                  <text x="250" y="175" textAnchor="middle" className="text-xs font-bold fill-green-600 md:text-sm">Development</text>
+                </g>
+                
+                {/* Stage 3 - Launch */}
+                <g className="stage-group cursor-pointer" style={{ animationDelay: '1.5s' }}>
+                  <circle cx="450" cy="200" r="16" fill="#8B5CF6" stroke="#ffffff" strokeWidth="4" className="animate-scale-in hover:animate-bounce"/>
+                  <circle cx="450" cy="200" r="20" fill="none" stroke="#8B5CF6" strokeWidth="2" opacity="0.3" className="animate-ping"/>
+                  <text x="450" y="206" textAnchor="middle" className="text-sm font-bold fill-white">3</text>
+                  <text x="450" y="235" textAnchor="middle" className="text-xs font-bold fill-purple-600 md:text-sm">Launch</text>
+                </g>
+                
+                {/* Stage 4 - Growth */}
+                <g className="stage-group cursor-pointer" style={{ animationDelay: '2s' }}>
+                  <circle cx="650" cy="260" r="16" fill="#F59E0B" stroke="#ffffff" strokeWidth="4" className="animate-scale-in hover:animate-bounce"/>
+                  <circle cx="650" cy="260" r="20" fill="none" stroke="#F59E0B" strokeWidth="2" opacity="0.3" className="animate-ping"/>
+                  <text x="650" y="266" textAnchor="middle" className="text-sm font-bold fill-white">4</text>
+                  <text x="650" y="295" textAnchor="middle" className="text-xs font-bold fill-orange-600 md:text-sm">Growth</text>
+                </g>
+                
+                {/* Arrow indicators with animation */}
+                <polygon points="195,75 205,80 195,85" fill="#4F46E5" className="animate-slide-right" style={{ animationDelay: '0.8s' }}/>
+                <polygon points="395,135 405,140 395,145" fill="#4F46E5" className="animate-slide-right" style={{ animationDelay: '1.3s' }}/>
+                <polygon points="595,195 605,200 595,205" fill="#4F46E5" className="animate-slide-right" style={{ animationDelay: '1.8s' }}/>
+                <polygon points="745,255 755,260 745,265" fill="#4F46E5" className="animate-slide-right" style={{ animationDelay: '2.3s' }}/>
+              </svg>
+            </div>
+          </div>
+
           {/* Modern Road Map Cards */}
           <div className="mt-20">
             {/* Desktop 2x2 Grid */}

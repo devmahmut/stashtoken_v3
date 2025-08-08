@@ -56,3 +56,60 @@ body {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Roadmap Timeline Animations */
+  @keyframes draw-path {
+    0% {
+      stroke-dashoffset: 1000;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes scale-in {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-right {
+    0% {
+      transform: translateX(-10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-draw-path {
+    animation: draw-path 3s ease-in-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.6s ease-out forwards;
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .animate-slide-right {
+    animation: slide-right 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  /* SVG hover effects */
+  .stage-group:hover circle:first-child {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
